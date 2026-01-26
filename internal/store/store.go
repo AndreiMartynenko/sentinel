@@ -10,13 +10,22 @@ type PriceStore struct {
 	prices map[string]types.PriceEvent
 }
 
-func (s *Store) Update(event types.PriceEvent) {
-	s.Lock()
-	defer s.Unlock()
-	s.prices[price.ID] = price
+func NewPriceStore() *PriceStore {
+	return &PriceStore{
+		prices: make(map[string]types.PriceEvent),
+	}
+}
+
+func (s *PriceStore) Update(event types.PriceEvent) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.prices[event.Symbol] = event
 
 }
 
-func (s *Store) Get(symbol string) (types.PriceEven, bool) {
-	return
+func (s *PriceStore) Get(symbol string) (types.PriceEvent, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	ev, ok := s.prices[symbol]
+	return ev, ok
 }
