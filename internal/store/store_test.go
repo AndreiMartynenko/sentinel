@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// go test -race
+
 func TestStoreConcurrentAccess(t *testing.T) {
 	store := NewPriceStore()
 

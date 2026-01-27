@@ -1,3 +1,3 @@
-module github.com/AndreiMartynenko/realtime-market-engine
+module realtime-market-engine
 
 go 1.24.11

@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/AndreiMartynenko/realtime-market-engine/types"
+	"realtime-market-engine/internal/types"
 	"sync"
 )
 
