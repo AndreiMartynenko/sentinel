@@ -16,6 +16,7 @@ import (
 )
 
 // better improvements
+// should run 24/7
 func main() {
 	var httpAddr string
 	flag.StringVar(&httpAddr, "http", ":8080", "HTTP listen address")
