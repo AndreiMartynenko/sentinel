@@ -17,6 +17,8 @@ import (
 
 // better improvements
 // should run 24/7
+// Should identify trend changing in a very quick manner
+
 func main() {
 	var httpAddr string
 	flag.StringVar(&httpAddr, "http", ":8080", "HTTP listen address")
