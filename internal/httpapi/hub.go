@@ -10,7 +10,7 @@ import (
 type Hub struct {
 	register   chan *client
 	unregister chan *client
-	broadcast  chan types.PriceEvent
+	broadcast  chan []byte
 	clients    map[*client]struct{}
 }
 
@@ -18,7 +18,7 @@ func NewHub() *Hub {
 	return &Hub{
 		register:   make(chan *client),
 		unregister: make(chan *client),
-		broadcast:  make(chan types.PriceEvent, 1024),
+		broadcast:  make(chan []byte, 1024),
 		clients:    make(map[*client]struct{}),
 	}
 }
@@ -39,11 +39,7 @@ func (h *Hub) Run(ctx context.Context) {
 				delete(h.clients, c)
 				close(c.send)
 			}
-		case ev := <-h.broadcast:
-			b, err := json.Marshal(ev)
-			if err != nil {
-				continue
-			}
+		case b := <-h.broadcast:
 			for c := range h.clients {
 				select {
 				case c.send <- b:
@@ -56,9 +52,17 @@ func (h *Hub) Run(ctx context.Context) {
 	}
 }
 
-func (h *Hub) Publish(ev types.PriceEvent) {
+func (h *Hub) PublishPrice(ev types.PriceEvent) {
+	b, err := json.Marshal(ev)
+	if err != nil {
+		return
+	}
+	h.PublishJSON(b)
+}
+
+func (h *Hub) PublishJSON(b []byte) {
 	select {
-	case h.broadcast <- ev:
+	case h.broadcast <- b:
 	default:
 	}
 }
