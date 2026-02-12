@@ -48,6 +48,27 @@ type EMACrossoverDetector struct {
 	lastTimestamp time.Time
 }
 
+func (d *EMACrossoverDetector) Ready() bool {
+	return d.hasEMA
+}
+
+func (d *EMACrossoverDetector) EMAs() (fast float64, slow float64, ok bool) {
+	if !d.hasEMA {
+		return 0, 0, false
+	}
+	return d.fastEMA, d.slowEMA, true
+}
+
+func (d *EMACrossoverDetector) CurrentDirection() (Direction, bool) {
+	if !d.hasEMA {
+		return "", false
+	}
+	if d.fastEMA >= d.slowEMA {
+		return DirectionUp, true
+	}
+	return DirectionDown, true
+}
+
 func NewEMACrossoverDetector(fastN, slowN, confirmTicks int, minRelDiff float64, cooldown time.Duration) *EMACrossoverDetector {
 	if fastN <= 0 {
 		fastN = 20
