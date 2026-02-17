@@ -23,7 +23,6 @@ import (
 // should run 24/7
 // Should identify trend changing in a very quick manner
 // notify about changing
-// open a position??
 
 func main() {
 	var httpAddr string
