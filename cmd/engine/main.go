@@ -19,11 +19,6 @@ import (
 	"realtime-market-engine/internal/trend"
 )
 
-// better improvements
-// should run 24/7
-// Should identify trend changing in a very quick manner
-// notify about changing
-
 func main() {
 	var httpAddr string
 	var emaFast int
